@@ -32,7 +32,7 @@ class Program
         }*/
 
         // Get the unique words from all documents
-        List<string> uniqueWords = OrganizeWords.Unique_Words(string_to_list);
+        List<string> uniqueWords = OrganizeWords.GetUniqueWords(string_to_list);
 
         // Output the list
         /*foreach (string word in uniqueWords)
