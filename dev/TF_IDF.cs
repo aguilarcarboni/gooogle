@@ -4,6 +4,7 @@ using System.Reflection.Metadata;
 using System.Linq;
 
 static class TF_IDF {
+    // Esto deberia estar en Drive o document
     public static List<Dictionary<string, double>> ComputeTF(List<Dictionary<string, int>> WordOccurrences) {
 
         // Initialize a list to hold TF dictionaries for each document

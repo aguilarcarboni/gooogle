@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Reflection.Metadata;
 using System.Linq;
 
-static class OrganizeWords{
+static class WordOrganizer{
 
-    public static List<string> String_to_List(List<string> documents) {
+    // Esto deberia estar en document
+    public static List<string> StringToList(List<string> documents) {
         // List to collect all words from all documents
         
         List<string> allWords = new List<string>{};
@@ -23,6 +24,7 @@ static class OrganizeWords{
         return allWords;
     }
 
+    // Esto deberia estar en document
     public static List<List<string>> CreateWordLists(List<string> documents) {
         // List to collect lists of words from each document
         List<List<string>> listOfWordLists = new List<List<string>>();
@@ -42,26 +44,7 @@ static class OrganizeWords{
         return listOfWordLists;
     }
 
-    public static List<string> GetUniqueWords(List<string> documents) {
-        // Use a HashSet to eliminate words that are repeating
-        HashSet<string> uniqueWords = new HashSet<string>();
-
-        // Get all words from the documents
-        List<string> allWords = String_to_List(documents);
-
-        // Add each word to the HashSet
-        foreach (string word in allWords)
-        {
-            uniqueWords.Add(word.ToLower()); // Convert to lowercase for case-insensitive comparison
-        }
-
-        // Convert HashSet to List
-        List<string> myList = new List<string>(uniqueWords);
-
-        // Return the list of unique words
-        return myList;
-    }
-
+    // Esto deberia estar en document o Drive
     public static List<Dictionary<string, int>> CountWordOccurrences(List<List<string>> docs, List<string> allUniqueWords) {
         // Initialize a list to store word count dictionaries for each document
         List<Dictionary<string, int>> wordCounts = new List<Dictionary<string, int>>();
@@ -95,6 +78,7 @@ static class OrganizeWords{
         return wordCounts;
     }
 
+    // Esto deberia estar en otro objeto de Drive
     public static Dictionary<string, int> ComputeDocumentFrequency(List<Dictionary<string, int>> wordOccurrences) {
         // Initialize a dictionary to store the number of documents each word appears in
         Dictionary<string, int> documentFrequency = new Dictionary<string, int>();
