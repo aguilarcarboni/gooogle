@@ -1,0 +1,115 @@
+﻿@page "/files"
+@inject Drive Drive
+
+<PageTitle>Files</PageTitle>
+
+<div class="min-h-screen bg-background gap-y-5 flex flex-col justify-center items-center text-foreground p-8">
+    <h1 class="text-7xl font-bold text-primary mb-4">Your files</h1>
+
+    <button @onclick="OpenAddDocumentPopup" class="bg-primary text-background hover:bg-primary-dark p-2 rounded">Add New Document</button>
+
+    @if (showAddDocumentPopup)
+    {
+        <div class="fixed inset-0 bg-background shadow-md p-10 flex justify-center items-center">
+            <div class="bg-background p-6 rounded-lg shadow-lg">
+                <h2 class="text-3xl text-foreground font-bold mb-4">Add a new document</h2>
+                <form @onsubmit="AddNewDocument" class="mb-4">
+                    <div class="mb-2">
+                        <label for="fileInput" class="block text-sm font-medium">Upload File (Only .txt files accepted):</label>
+                        <InputFile OnChange="@LoadFile" accept=".txt" class="mt-1 p-2 w-full" />
+                    </div>
+                    <div class="mb-2">
+                        <label for="documentType" class="block text-sm font-medium">Document Type:</label>
+                        <input type="text" id="documentType" @bind="newDocumentType" class="mt-1 p-2 w-full bg-muted rounded" required />
+                    </div>
+                    <div class="mb-2">
+                        <label for="fileName" class="block text-sm font-medium">File Name:</label>
+                        <input type="text" id="fileName" @bind="newFileName" class="mt-1 p-2 w-full bg-muted rounded" required />
+                    </div>
+                    <div class="flex justify-end gap-x-10 gap-2">
+                        <button type="button" @onclick="CloseAddDocumentPopup" class="bg-muted text-foreground hover:bg-muted-dark p-2 rounded">Cancel</button>
+                        <button type="submit" class="bg-secondary text-background hover:bg-secondary-dark p-2 rounded">Add Document</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(errorMessage))
+    {
+        <p class="text-red-500">@errorMessage</p>
+    }
+
+    <div class="flex flex-wrap gap-x-5 gap-y-5 justify-center items-center">
+
+        @foreach (Document doc in Drive.GetAllDocuments())
+        {
+            <div class="flex flex-col bg-background p-4 rounded-lg shadow-md">
+                <p class="text-2xl text-foreground">@doc.FileName</p>
+                <p class="text-sm text-subtitle">@doc.Type file</p>
+            </div>
+        }
+
+    </div>
+</div>
+
+@code {
+    private string newDocumentType = "";
+    private string newFileName = "";
+    private IBrowserFile uploadedFile;
+    private string errorMessage = "";
+
+    private bool showAddDocumentPopup = false;
+
+    private void OpenAddDocumentPopup()
+    {
+        showAddDocumentPopup = true;
+    }
+
+    private void CloseAddDocumentPopup()
+    {
+        showAddDocumentPopup = false;
+    }
+
+    private async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        errorMessage = "";
+        if (e.File.ContentType == "text/plain")
+        {
+            uploadedFile = e.File;
+            newFileName = uploadedFile.Name;
+        }
+        else
+        {
+            errorMessage = "Only .txt files are accepted.";
+            uploadedFile = null;
+            newFileName = "";
+        }
+    }
+
+    private async Task AddNewDocument()
+    {
+        errorMessage = "";
+        if (!string.IsNullOrWhiteSpace(newDocumentType) && uploadedFile != null)
+        {
+            using var stream = uploadedFile.OpenReadStream();
+            using var reader = new StreamReader(stream);
+            string content = await reader.ReadToEndAsync();
+
+            var document = new Document(newDocumentType, newFileName)
+            {
+                Content = content
+            };
+
+            Drive.AddDocument(document);
+            Console.WriteLine($"Document added: {newFileName} of type {newDocumentType}");
+            newDocumentType = "";
+            newFileName = "";
+            uploadedFile = null;
+        }
+        else
+        {
+            errorMessage = "Please provide a document type and upload a valid .txt file.";
+        }
+    }
+}

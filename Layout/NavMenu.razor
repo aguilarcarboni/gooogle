@@ -1,0 +1,18 @@
+﻿
+<nav class="flex gap-x-10 w-fit h-fit items-center">
+    <NavLink class="hover:bg-primary hover:text-background w-fit h-fit rounded p-2" href="" Match="NavLinkMatch.All">
+       Home
+    </NavLink>
+    <NavLink class="hover:bg-primary hover:text-background w-fit h-fit rounded p-2" href="files">
+       Files
+    </NavLink>
+</nav>
+
+@code {
+    private bool collapseNavMenu = true;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+}
