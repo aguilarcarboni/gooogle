@@ -18,4 +18,4 @@ Ensure you have the .NET SDK installed on your machine. For VSCode setup, follow
 ### Results
 (This section can be filled out after project completion with performance metrics, benchmarks, or any notable achievements)
 
-### Created by [@YourGitHubUsername](https://github.com/YourGitHubUsername/)
+### Created by [@aguilarcarboni](https://github.com/aguilarcarboni/) and 
