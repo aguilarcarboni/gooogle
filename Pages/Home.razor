@@ -12,6 +12,19 @@
         Welcome to Archimedes, your personal Drive search engine.
     </p>
 
-    <input type="text" placeholder="Search..." class="bg-muted p-4 rounded-lg w-full text-foreground" />
+    <input type="text" @bind="searchQuery" @bind:event="oninput" @onkeyup="HandleKeyUp" placeholder="Search..." class="bg-muted p-4 rounded-lg w-full text-foreground" />
 
 </div>
+
+@code {
+    private string searchQuery = "";
+
+    private void HandleKeyUp(KeyboardEventArgs e)
+    {
+        if (e.Key == "Enter")
+        {
+            Console.WriteLine($"Search query entered: {searchQuery}");
+            // functions
+        }
+    }
+}
