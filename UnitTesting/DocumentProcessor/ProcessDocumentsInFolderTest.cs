@@ -1,3 +1,6 @@
+using System;
+using Xunit;
+
 class ProcessDocumentsInFolderTest
 {
     static void Main()
