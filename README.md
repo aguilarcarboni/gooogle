@@ -1,4 +1,4 @@
-# OOP Project 1: Indexer
+# OOP Project 1: Prometheus
 
 ## Efficient text document indexing and searching system
 
