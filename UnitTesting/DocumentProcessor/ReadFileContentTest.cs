@@ -1,18 +1,35 @@
 using System;
+using System.IO;
 using Xunit;
 
-class ReadFileContentTest
+public class ReadFileContentTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string filePath = @"C:\path\to\test\file.txt"; // Replace with an actual file path
-        string fileType = "txt"; // Change this to test different file types
+        Console.WriteLine("Running ReadFileContent test:");
+        var test = new ReadFileContentTest();
+        test.TestReadFileContent();
+        Console.WriteLine("Test completed.");
+    }
 
-        string result = processor.ReadFileContent(filePath, fileType);
+    [Fact]
+    public void TestReadFileContent()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFilePath = Path.GetTempFileName();
+        File.WriteAllText(testFilePath, "Hello, world!");
 
-        Console.WriteLine("ReadFileContent Result:");
-        Console.WriteLine($"Content length: {result.Length}");
-        Console.WriteLine($"First 100 characters: {result.Substring(0, Math.Min(100, result.Length))}");
+        // Act
+        var result = processor.ReadFileContent(testFilePath, "txt");
+
+        // Assert
+        Assert.Equal("Hello, world!", result);
+
+        // Clean up
+        File.Delete(testFilePath);
+
+        // Console output for manual verification
+        Console.WriteLine($"File content: {result}");
     }
 }
