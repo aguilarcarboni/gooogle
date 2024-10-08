@@ -1,19 +1,47 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 using Xunit;
 
-class ProcessDocumentsInFolderTest
+public class ProcessDocumentsInFolderTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string folderPath = @"C:\path\to\test\folder"; // Replace with an actual folder path
+        Console.WriteLine("Running ProcessDocumentsInFolder test:");
+        var test = new ProcessDocumentsInFolderTest();
+        test.TestProcessDocumentsInFolder();
+        Console.WriteLine("Test completed.");
+    }
 
-        Dictionary<string, string> result = processor.ProcessDocumentsInFolder(folderPath);
+    [Fact]
+    public void TestProcessDocumentsInFolder()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFolderPath = Path.Combine(Path.GetTempPath(), "TestDocuments");
+        Directory.CreateDirectory(testFolderPath);
 
-        Console.WriteLine("ProcessDocumentsInFolder Result:");
+        File.WriteAllText(Path.Combine(testFolderPath, "test.txt"), "Hello, world!");
+        File.WriteAllText(Path.Combine(testFolderPath, "test.csv"), "Name,Age\nJohn,30");
+
+        // Act
+        var result = processor.ProcessDocumentsInFolder(testFolderPath);
+
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Contains("test.txt", result.Keys);
+        Assert.Contains("test.csv", result.Keys);
+        Assert.Equal("Hello, world!", result["test.txt"]);
+        Assert.Equal("Name Age John 30", result["test.csv"]);
+
+        // Clean up
+        Directory.Delete(testFolderPath, true);
+
+        // Console output for manual verification
         foreach (var doc in result)
         {
-            Console.WriteLine($"File: {doc.Key}, Content length: {doc.Value.Length}");
+            Console.WriteLine($"Document: {doc.Key}");
+            Console.WriteLine($"Content: {doc.Value}");
         }
     }
 }
