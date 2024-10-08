@@ -1,17 +1,35 @@
 using System;
+using System.IO;
 using Xunit;
 
-class ReadCSVTest
+public class ReadCSVTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string filePath = @"C:\path\to\test\file.csv"; // Replace with an actual CSV file path
+        Console.WriteLine("Running ReadCSV test:");
+        var test = new ReadCSVTest();
+        test.TestReadCSV();
+        Console.WriteLine("Test completed.");
+    }
 
-        string result = processor.ReadCSV(filePath);
+    [Fact]
+    public void TestReadCSV()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFilePath = Path.GetTempFileName();
+        File.WriteAllText(testFilePath, "Name,Age\nJohn,30\nJane,25");
 
-        Console.WriteLine("ReadCSV Result:");
-        Console.WriteLine($"Content length: {result.Length}");
-        Console.WriteLine($"First 100 characters: {result.Substring(0, Math.Min(100, result.Length))}");
+        // Act
+        var result = processor.ReadCSV(testFilePath);
+
+        // Assert
+        Assert.Equal("Name Age John 30 Jane 25", result);
+
+        // Clean up
+        File.Delete(testFilePath);
+
+        // Console output for manual verification
+        Console.WriteLine($"CSV content: {result}");
     }
 }
