@@ -1,17 +1,35 @@
 using System;
+using System.IO;
 using Xunit;
 
-class ReadXMLTest
+public class ReadXMLTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string filePath = @"C:\path\to\test\file.xml"; // Replace with an actual XML file path
+        Console.WriteLine("Running ReadXML test:");
+        var test = new ReadXMLTest();
+        test.TestReadXML();
+        Console.WriteLine("Test completed.");
+    }
 
-        string result = processor.ReadXML(filePath);
+    [Fact]
+    public void TestReadXML()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFilePath = Path.GetTempFileName();
+        File.WriteAllText(testFilePath, "<root><item>Test</item></root>");
 
-        Console.WriteLine("ReadXML Result:");
-        Console.WriteLine($"Content length: {result.Length}");
-        Console.WriteLine($"First 100 characters: {result.Substring(0, Math.Min(100, result.Length))}");
+        // Act
+        var result = processor.ReadXML(testFilePath);
+
+        // Assert
+        Assert.Equal("<root><item>Test</item></root>", result);
+
+        // Clean up
+        File.Delete(testFilePath);
+
+        // Console output for manual verification
+        Console.WriteLine($"XML content: {result}");
     }
 }
