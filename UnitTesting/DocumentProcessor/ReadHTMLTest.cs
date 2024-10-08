@@ -1,17 +1,35 @@
 using System;
+using System.IO;
 using Xunit;
 
-class ReadHTMLTest
+public class ReadHTMLTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string filePath = @"C:\path\to\test\file.html"; // Replace with an actual HTML file path
+        Console.WriteLine("Running ReadHTML test:");
+        var test = new ReadHTMLTest();
+        test.TestReadHTML();
+        Console.WriteLine("Test completed.");
+    }
 
-        string result = processor.ReadHTML(filePath);
+    [Fact]
+    public void TestReadHTML()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFilePath = Path.GetTempFileName();
+        File.WriteAllText(testFilePath, "<html><body><p>Hello, world!</p></body></html>");
 
-        Console.WriteLine("ReadHTML Result:");
-        Console.WriteLine($"Content length: {result.Length}");
-        Console.WriteLine($"First 100 characters: {result.Substring(0, Math.Min(100, result.Length))}");
+        // Act
+        var result = processor.ReadHTML(testFilePath);
+
+        // Assert
+        Assert.Equal("Hello, world!", result);
+
+        // Clean up
+        File.Delete(testFilePath);
+
+        // Console output for manual verification
+        Console.WriteLine($"HTML content: {result}");
     }
 }
