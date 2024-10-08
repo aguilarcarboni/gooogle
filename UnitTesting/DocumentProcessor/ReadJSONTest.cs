@@ -1,17 +1,35 @@
 using System;
+using System.IO;
 using Xunit;
 
-class ReadJSONTest
+public class ReadJSONTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
-        DocumentProcessor processor = new DocumentProcessor();
-        string filePath = @"C:\path\to\test\file.json"; // Replace with an actual JSON file path
+        Console.WriteLine("Running ReadJSON test:");
+        var test = new ReadJSONTest();
+        test.TestReadJSON();
+        Console.WriteLine("Test completed.");
+    }
 
-        string result = processor.ReadJSON(filePath);
+    [Fact]
+    public void TestReadJSON()
+    {
+        // Arrange
+        var processor = new DocumentProcessor();
+        var testFilePath = Path.GetTempFileName();
+        File.WriteAllText(testFilePath, "{\"name\":\"John\",\"age\":30}");
 
-        Console.WriteLine("ReadJSON Result:");
-        Console.WriteLine($"Content length: {result.Length}");
-        Console.WriteLine($"First 100 characters: {result.Substring(0, Math.Min(100, result.Length))}");
+        // Act
+        var result = processor.ReadJSON(testFilePath);
+
+        // Assert
+        Assert.Equal("{\"name\":\"John\",\"age\":30}", result);
+
+        // Clean up
+        File.Delete(testFilePath);
+
+        // Console output for manual verification
+        Console.WriteLine($"JSON content: {result}");
     }
 }
