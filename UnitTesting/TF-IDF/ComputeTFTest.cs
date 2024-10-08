@@ -2,20 +2,37 @@ using System;
 using System.Collections.Generic;
 using Xunit;
 
-class ComputeTFTest
+public class ComputeTFTest
 {
-    static void Main()
+    public static void Main(string[] args)
     {
+        new ComputeTFTest().TestComputeTF();
+    }
+
+    [Fact]
+    public void TestComputeTF()
+    {
+        Console.WriteLine("Running ComputeTF test:");
+
+        // Arrange
+        var tf_idf = new TF_IDF.tf_idf();
         var wordOccurrences = new Dictionary<string, Dictionary<string, int>>
         {
-            ["doc1"] = new Dictionary<string, int> { ["apple"] = 2, ["banana"] = 1, ["cherry"] = 1 },
-            ["doc2"] = new Dictionary<string, int> { ["apple"] = 1, ["cherry"] = 3 }
+            {"doc1", new Dictionary<string, int> {{"hello", 2}, {"world", 1}}},
+            {"doc2", new Dictionary<string, int> {{"hello", 1}, {"test", 1}}}
         };
 
-        TF_IDF.tf_idf tfIdf = new TF_IDF.tf_idf();
-        var result = tfIdf.ComputeTF(wordOccurrences);
+        // Act
+        var result = tf_idf.ComputeTF(wordOccurrences);
 
-        Console.WriteLine("ComputeTF Result:");
+        // Assert
+        Assert.Equal(2, result.Count);
+        Assert.Equal(2.0/3, result["doc1"]["hello"], 3);
+        Assert.Equal(1.0/3, result["doc1"]["world"], 3);
+        Assert.Equal(0.5, result["doc2"]["hello"], 3);
+        Assert.Equal(0.5, result["doc2"]["test"], 3);
+
+        // Console output for manual verification
         foreach (var doc in result)
         {
             Console.WriteLine($"Document: {doc.Key}");
@@ -24,15 +41,6 @@ class ComputeTFTest
                 Console.WriteLine($"  {word.Key}: {word.Value}");
             }
         }
-
-        // Assertions
-        Assert.Equal(2, result.Count);
-        Assert.Equal(0.5, result["doc1"]["apple"]);
-        Assert.Equal(0.25, result["doc1"]["banana"]);
-        Assert.Equal(0.25, result["doc1"]["cherry"]);
-        Assert.Equal(0.25, result["doc2"]["apple"]);
-        Assert.Equal(0.75, result["doc2"]["cherry"]);
-
-        Console.WriteLine("All tests passed!");
+        Console.WriteLine("Test completed.");
     }
 }
