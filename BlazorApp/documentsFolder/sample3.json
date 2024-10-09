@@ -1,0 +1,46 @@
+{
+    "bookstore": {
+      "name": "My Favorite Bookstore",
+      "location": {
+        "street": "123 Reading Lane",
+        "city": "Bookville",
+        "state": "PA",
+        "zip": "19001"
+      },
+      "established": 1995,
+      "owner": "Jane Bookworm",
+      "books": [
+        {
+          "title": "The Great Gatsby",
+          "author": "F. Scott Fitzgerald",
+          "genre": "Classic",
+          "published": 1925,
+          "isbn": "9780743273565",
+          "price": 12.99,
+          "inStock": true
+        },
+        {
+          "title": "To Kill a Mockingbird",
+          "author": "Harper Lee",
+          "genre": "Fiction",
+          "published": 1960,
+          "isbn": "9780446310789",
+          "price": 14.99,
+          "inStock": false
+        },
+        {
+          "title": "1984",
+          "author": "George Orwell",
+          "genre": "Science Fiction",
+          "published": 1949,
+          "isbn": "9780451524935",
+          "price": 11.99,
+          "inStock": true
+        }
+      ],
+      "bestseller": {
+        "title": "To Kill a Mockingbird",
+        "copiesSold": 5000
+      }
+    }
+  }
