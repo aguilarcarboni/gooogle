@@ -1,0 +1,753 @@
+{
+  "my": [
+    "sample5.html",
+    "sample3.json"
+  ],
+  "first": [
+    "sample5.html"
+  ],
+  "heading": [
+    "sample5.html"
+  ],
+  "paragraph": [
+    "sample5.html"
+  ],
+  "team": [
+    "sample2.html"
+  ],
+  "directory": [
+    "sample2.html"
+  ],
+  "name": [
+    "sample2.html",
+    "sample3.json"
+  ],
+  "position": [
+    "sample2.html"
+  ],
+  "email": [
+    "sample2.html"
+  ],
+  "john": [
+    "sample2.html"
+  ],
+  "doe": [
+    "sample2.html"
+  ],
+  "project": [
+    "sample2.html"
+  ],
+  "manager": [
+    "sample2.html",
+    "sample1.txt"
+  ],
+  "example": [
+    "sample2.html"
+  ],
+  "com": [
+    "sample2.html"
+  ],
+  "jane": [
+    "sample2.html",
+    "sample3.json"
+  ],
+  "smith": [
+    "sample2.html"
+  ],
+  "lead": [
+    "sample2.html"
+  ],
+  "developer": [
+    "sample2.html",
+    "sample1.txt"
+  ],
+  "mike": [
+    "sample2.html"
+  ],
+  "johnson": [
+    "sample2.html"
+  ],
+  "ux": [
+    "sample2.html"
+  ],
+  "designer": [
+    "sample2.html",
+    "sample1.txt"
+  ],
+  "bookstore": [
+    "sample3.json"
+  ],
+  "favorite": [
+    "sample3.json"
+  ],
+  "location": [
+    "sample3.json"
+  ],
+  "street": [
+    "sample3.json"
+  ],
+  "123": [
+    "sample3.json"
+  ],
+  "reading": [
+    "sample3.json"
+  ],
+  "lane": [
+    "sample3.json"
+  ],
+  "city": [
+    "sample3.json"
+  ],
+  "bookville": [
+    "sample3.json"
+  ],
+  "state": [
+    "sample3.json"
+  ],
+  "pa": [
+    "sample3.json"
+  ],
+  "zip": [
+    "sample3.json"
+  ],
+  "19001": [
+    "sample3.json"
+  ],
+  "established": [
+    "sample3.json"
+  ],
+  "1995": [
+    "sample3.json"
+  ],
+  "owner": [
+    "sample3.json"
+  ],
+  "bookworm": [
+    "sample3.json"
+  ],
+  "books": [
+    "sample3.json"
+  ],
+  "title": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "great": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "gatsby": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "author": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "scott": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "fitzgerald": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "genre": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "classic": [
+    "sample3.json"
+  ],
+  "published": [
+    "sample3.json"
+  ],
+  "1925": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "isbn": [
+    "sample3.json"
+  ],
+  "9780743273565": [
+    "sample3.json"
+  ],
+  "price": [
+    "sample3.json"
+  ],
+  "12": [
+    "sample3.json",
+    "day.csv"
+  ],
+  "99": [
+    "sample3.json"
+  ],
+  "instock": [
+    "sample3.json"
+  ],
+  "true": [
+    "sample3.json"
+  ],
+  "kill": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "mockingbird": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "harper": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "lee": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "fiction": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "1960": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "9780446310789": [
+    "sample3.json"
+  ],
+  "14": [
+    "sample3.json",
+    "day.csv"
+  ],
+  "false": [
+    "sample3.json"
+  ],
+  "1984": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "george": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "orwell": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "science": [
+    "sample3.json"
+  ],
+  "1949": [
+    "sample3.json",
+    "sample2.xml"
+  ],
+  "9780451524935": [
+    "sample3.json"
+  ],
+  "11": [
+    "sample3.json",
+    "day.csv"
+  ],
+  "bestseller": [
+    "sample3.json"
+  ],
+  "copiessold": [
+    "sample3.json"
+  ],
+  "5000": [
+    "sample3.json"
+  ],
+  "xml": [
+    "sample2.xml"
+  ],
+  "version": [
+    "sample2.xml"
+  ],
+  "encoding": [
+    "sample2.xml"
+  ],
+  "utf-8": [
+    "sample2.xml"
+  ],
+  "library": [
+    "sample2.xml"
+  ],
+  "book": [
+    "sample2.xml"
+  ],
+  "id": [
+    "sample2.xml"
+  ],
+  "year": [
+    "sample2.xml",
+    "sample6.html"
+  ],
+  "dystopian": [
+    "sample2.xml"
+  ],
+  "numeric": [
+    "day.csv"
+  ],
+  "numeric-2": [
+    "day.csv"
+  ],
+  "numeric-suffix": [
+    "day.csv"
+  ],
+  "01": [
+    "day.csv"
+  ],
+  "1st": [
+    "day.csv"
+  ],
+  "02": [
+    "day.csv"
+  ],
+  "2nd": [
+    "day.csv"
+  ],
+  "03": [
+    "day.csv"
+  ],
+  "3rd": [
+    "day.csv"
+  ],
+  "04": [
+    "day.csv"
+  ],
+  "4th": [
+    "day.csv"
+  ],
+  "05": [
+    "day.csv"
+  ],
+  "5th": [
+    "day.csv"
+  ],
+  "06": [
+    "day.csv"
+  ],
+  "6th": [
+    "day.csv"
+  ],
+  "07": [
+    "day.csv"
+  ],
+  "7th": [
+    "day.csv"
+  ],
+  "08": [
+    "day.csv"
+  ],
+  "8th": [
+    "day.csv"
+  ],
+  "09": [
+    "day.csv"
+  ],
+  "9th": [
+    "day.csv"
+  ],
+  "10": [
+    "day.csv",
+    "sample7.html"
+  ],
+  "10th": [
+    "day.csv"
+  ],
+  "11th": [
+    "day.csv"
+  ],
+  "12th": [
+    "day.csv"
+  ],
+  "13": [
+    "day.csv"
+  ],
+  "13th": [
+    "day.csv"
+  ],
+  "14th": [
+    "day.csv"
+  ],
+  "15": [
+    "day.csv",
+    "sample6.html"
+  ],
+  "15th": [
+    "day.csv"
+  ],
+  "16": [
+    "day.csv"
+  ],
+  "16th": [
+    "day.csv"
+  ],
+  "17": [
+    "day.csv",
+    "sample7.html"
+  ],
+  "17th": [
+    "day.csv"
+  ],
+  "18": [
+    "day.csv"
+  ],
+  "18th": [
+    "day.csv"
+  ],
+  "19": [
+    "day.csv"
+  ],
+  "19th": [
+    "day.csv"
+  ],
+  "20": [
+    "day.csv"
+  ],
+  "20th": [
+    "day.csv"
+  ],
+  "21": [
+    "day.csv"
+  ],
+  "21st": [
+    "day.csv"
+  ],
+  "22": [
+    "day.csv"
+  ],
+  "22nd": [
+    "day.csv"
+  ],
+  "23": [
+    "day.csv"
+  ],
+  "23rd": [
+    "day.csv"
+  ],
+  "24": [
+    "day.csv"
+  ],
+  "24th": [
+    "day.csv"
+  ],
+  "25": [
+    "day.csv"
+  ],
+  "25th": [
+    "day.csv"
+  ],
+  "26": [
+    "day.csv"
+  ],
+  "26th": [
+    "day.csv"
+  ],
+  "27": [
+    "day.csv"
+  ],
+  "27th": [
+    "day.csv"
+  ],
+  "28": [
+    "day.csv"
+  ],
+  "28th": [
+    "day.csv"
+  ],
+  "29": [
+    "day.csv"
+  ],
+  "29th": [
+    "day.csv"
+  ],
+  "30": [
+    "day.csv"
+  ],
+  "30th": [
+    "day.csv"
+  ],
+  "31": [
+    "day.csv"
+  ],
+  "31st": [
+    "day.csv"
+  ],
+  "company": [
+    "sample6.html"
+  ],
+  "policies": [
+    "sample6.html"
+  ],
+  "work": [
+    "sample6.html"
+  ],
+  "hours": [
+    "sample6.html"
+  ],
+  "standard": [
+    "sample6.html"
+  ],
+  "am": [
+    "sample6.html"
+  ],
+  "pm": [
+    "sample6.html"
+  ],
+  "monday": [
+    "sample6.html"
+  ],
+  "through": [
+    "sample6.html"
+  ],
+  "friday": [
+    "sample6.html"
+  ],
+  "flexible": [
+    "sample6.html"
+  ],
+  "may": [
+    "sample6.html"
+  ],
+  "arranged": [
+    "sample6.html"
+  ],
+  "management": [
+    "sample6.html"
+  ],
+  "approval": [
+    "sample6.html"
+  ],
+  "dress": [
+    "sample6.html"
+  ],
+  "code": [
+    "sample6.html"
+  ],
+  "business": [
+    "sample6.html"
+  ],
+  "casual": [
+    "sample6.html"
+  ],
+  "attire": [
+    "sample6.html"
+  ],
+  "expected": [
+    "sample6.html"
+  ],
+  "jeans": [
+    "sample6.html"
+  ],
+  "permitted": [
+    "sample6.html"
+  ],
+  "fridays": [
+    "sample6.html"
+  ],
+  "time": [
+    "sample6.html"
+  ],
+  "off": [
+    "sample6.html"
+  ],
+  "employees": [
+    "sample6.html"
+  ],
+  "receive": [
+    "sample6.html"
+  ],
+  "days": [
+    "sample6.html"
+  ],
+  "paid": [
+    "sample6.html"
+  ],
+  "per": [
+    "sample6.html"
+  ],
+  "accrued": [
+    "sample6.html"
+  ],
+  "monthly": [
+    "sample6.html"
+  ],
+  "unused": [
+    "sample6.html"
+  ],
+  "carried": [
+    "sample6.html"
+  ],
+  "over": [
+    "sample6.html"
+  ],
+  "next": [
+    "sample6.html"
+  ],
+  "up": [
+    "sample6.html"
+  ],
+  "maximum": [
+    "sample6.html"
+  ],
+  "remote": [
+    "sample6.html"
+  ],
+  "available": [
+    "sample6.html"
+  ],
+  "eligible": [
+    "sample6.html"
+  ],
+  "positions": [
+    "sample6.html"
+  ],
+  "must": [
+    "sample6.html"
+  ],
+  "maintain": [
+    "sample6.html"
+  ],
+  "regular": [
+    "sample6.html"
+  ],
+  "communication": [
+    "sample6.html"
+  ],
+  "meet": [
+    "sample6.html"
+  ],
+  "all": [
+    "sample6.html"
+  ],
+  "job": [
+    "sample6.html"
+  ],
+  "responsibilities": [
+    "sample6.html"
+  ],
+  "when": [
+    "sample6.html"
+  ],
+  "working": [
+    "sample6.html"
+  ],
+  "remotely": [
+    "sample6.html"
+  ],
+  "alice": [
+    "sample1.txt"
+  ],
+  "engineer": [
+    "sample1.txt"
+  ],
+  "bob": [
+    "sample1.txt"
+  ],
+  "charlie": [
+    "sample1.txt"
+  ],
+  "diana": [
+    "sample1.txt"
+  ],
+  "ethan": [
+    "sample1.txt"
+  ],
+  "teacher": [
+    "sample1.txt"
+  ],
+  "quarterly": [
+    "sample7.html"
+  ],
+  "financial": [
+    "sample7.html"
+  ],
+  "report": [
+    "sample7.html"
+  ],
+  "q2": [
+    "sample7.html"
+  ],
+  "2023": [
+    "sample7.html"
+  ],
+  "metric": [
+    "sample7.html"
+  ],
+  "q1": [
+    "sample7.html"
+  ],
+  "change": [
+    "sample7.html"
+  ],
+  "revenue": [
+    "sample7.html"
+  ],
+  "5m": [
+    "sample7.html"
+  ],
+  "8m": [
+    "sample7.html"
+  ],
+  "expenses": [
+    "sample7.html"
+  ],
+  "2m": [
+    "sample7.html"
+  ],
+  "0m": [
+    "sample7.html"
+  ],
+  "net": [
+    "sample7.html"
+  ],
+  "profit": [
+    "sample7.html"
+  ],
+  "3m": [
+    "sample7.html"
+  ],
+  "key": [
+    "sample7.html"
+  ],
+  "highlights": [
+    "sample7.html"
+  ],
+  "growth": [
+    "sample7.html"
+  ],
+  "driven": [
+    "sample7.html"
+  ],
+  "new": [
+    "sample7.html"
+  ],
+  "product": [
+    "sample7.html"
+  ],
+  "launch": [
+    "sample7.html"
+  ],
+  "well-controlled": [
+    "sample7.html"
+  ],
+  "despite": [
+    "sample7.html"
+  ],
+  "market": [
+    "sample7.html"
+  ],
+  "challenges": [
+    "sample7.html"
+  ],
+  "significant": [
+    "sample7.html"
+  ],
+  "improvement": [
+    "sample7.html"
+  ],
+  "margin": [
+    "sample7.html"
+  ]
+}

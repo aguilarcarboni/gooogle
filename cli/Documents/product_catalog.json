@@ -1,0 +1,40 @@
+{
+  "products": [
+    {
+      "id": "P001",
+      "name": "Smartphone X",
+      "category": "Electronics",
+      "price": 799.99,
+      "inStock": true,
+      "features": [
+        "5G capable",
+        "6.5 inch OLED display",
+        "Triple camera system"
+      ]
+    },
+    {
+      "id": "P002",
+      "name": "Ergonomic Office Chair",
+      "category": "Furniture",
+      "price": 249.99,
+      "inStock": false,
+      "features": [
+        "Adjustable height",
+        "Lumbar support",
+        "360-degree swivel"
+      ]
+    },
+    {
+      "id": "P003",
+      "name": "Wireless Noise-Cancelling Headphones",
+      "category": "Audio",
+      "price": 299.99,
+      "inStock": true,
+      "features": [
+        "40-hour battery life",
+        "Active noise cancellation",
+        "Bluetooth 5.0"
+      ]
+    }
+  ]
+}

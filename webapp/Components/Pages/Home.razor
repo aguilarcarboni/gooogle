@@ -1,0 +1,633 @@
+﻿@page "/"
+@rendermode InteractiveServer
+
+@using iTextSharp.text.pdf;
+@using iTextSharp.text.pdf.parser;
+@using System.Text;
+
+<PageTitle>Search Documents</PageTitle>
+
+
+<div class="google-search-container">
+    <div class="index-select-container">
+        <form @onsubmit="UpdateParameters">
+            <select class="index-select" @bind="tempSelectedIndex">
+                <option value="tf-idf">TF-IDF</option>
+                <option value="inverted">Inverted</option>
+            </select>
+            <select class="distance-select" @bind="tempSelectedDistance">
+                <option value="cosine">Cosine</option>
+                <option value="euclidean">Euclidean</option>
+            </select>
+            <button type="submit" class="update-button">Update Parameters</button>
+        </form>
+    </div>
+    <div class="google-logo">
+        <span style="color: #4285F4;">G</span>
+        <span style="color: #EA4335;">o</span>
+        <span style="color: #4285F4;">o</span>
+        <span style="color: #FBBC05;">o</span>
+        <span style="color: #4285F4;">g</span>
+        <span style="color: #34A853;">l</span>
+        <span style="color: #EA4335;">e</span>
+    </div>
+    <div class="search-box">
+        <input type="text" class="search-input" @bind="searchQuery" @bind:event="oninput" @onkeyup="HandleKeyPress" />
+        <div class="search-buttons">
+            <button class="search-button" @onclick="PerformSearch">Google Search</button>
+            <button class="search-button">I'm Feeling Lucky</button>
+            @if (similarities != null && similarities.Any())
+            {
+                <button class="reset-button" @onclick="ResetQuery">Reset Query</button>
+            }
+        </div>
+    </div>
+    @if (similarities != null && similarities.Any())
+    {
+        <div class="search-results">
+            @foreach (var result in similarities.OrderByDescending(x => x.Value).Take(DefaultK))
+            {
+                <div class="search-result-container">
+                    <div class="search-result">
+                        <h3><a href="#">@System.IO.Path.GetFileName(result.Key)</a></h3>
+                        <div class="search-result-url">@result.Key</div>
+                    </div>
+                    <div class="search-result-info">
+                            <button class="info-button" @onclick="() => TogglePopover(result.Key)">
+                                i
+                            </button>
+                            @if (activePopover == result.Key)
+                            {
+                                <div class="popover">
+                                    Similarity score: @result.Value.ToString("F4")
+                                </div>
+                            }
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="error-message">
+        @errorMessage
+    </div>
+}
+
+<style>
+    .google-search-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .google-logo {
+        font-size: 80px;
+        font-weight: bold;
+        font-family: arial,sans-serif;
+        letter-spacing: -8px;
+    }
+
+    .search-results-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+    }
+
+    .index-select-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
+    .index-select {
+        background-color: #f8f9fa;
+        border: 1px solid #f8f9fa;
+        border-radius: 4px;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        margin: 11px 4px;
+        padding: 0 16px;
+        line-height: 27px;
+        height: 36px;
+        min-width: 54px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+    .search-result-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        min-width: 584px;
+        width: 584px;
+        border-bottom: 1px solid #dadce0;
+        justify-content: space-between;
+        padding: 10px;
+        border-radius: 4px;
+        border: 1px solid #dadce0;
+    }
+    .distance-select {
+        background-color: #f8f9fa;
+        border: 1px solid #f8f9fa;
+        border-radius: 4px;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        margin: 11px 4px;
+        padding: 0 16px;
+        line-height: 27px;
+        height: 36px;
+        min-width: 54px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .google-logo {
+        margin-bottom: 20px;
+    }
+
+    .search-box {
+        text-align: center;
+    }
+
+    .search-input {
+        width: 584px;
+        height: 44px;
+        border: 1px solid #dfe1e5;
+        border-radius: 24px;
+        padding: 0 20px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .search-input:hover,
+    .search-input:focus {
+        box-shadow: 0 1px 6px rgba(32,33,36,.28);
+        border-color: rgba(223,225,229,0);
+    }
+
+    .search-buttons {
+        margin-top: 20px;
+    }
+
+    .reset-button {
+        background-color: #ff0000;
+        border: 1px solid #ff0000;
+        border-radius: 4px;
+        color: #ffffff;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        margin: 11px 4px;
+        padding: 0 16px;
+        line-height: 27px;
+        height: 36px;
+        min-width: 54px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .search-button {
+        background-color: #f8f9fa;
+        border: 1px solid #f8f9fa;
+        border-radius: 4px;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        margin: 11px 4px;
+        padding: 0 16px;
+        line-height: 27px;
+        height: 36px;
+        min-width: 54px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .search-button:hover {
+        box-shadow: 0 1px 1px rgba(0,0,0,.1);
+        background-color: #f8f9fa;
+        border: 1px solid #dadce0;
+        color: #202124;
+    }
+
+    .search-results {
+        width: 584px;
+        margin-top: 20px;
+        text-align: left;
+        font-family: arial,sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .search-result {
+        height: fit-content;
+    }
+
+    .search-result h3 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .search-result h3 a {
+        color: #1a0dab;
+        text-decoration: none;
+    }
+
+    .search-result h3 a:hover {
+        text-decoration: underline;
+    }
+
+    .search-result-url {
+        color: #006621;
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    .search-result-snippet {
+        color: #545454;
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    .search-result-info {
+        position: relative;
+        display: inline-block;
+    }
+
+    .info-button {
+        background-color: #f8f9fa;
+        border: 1px solid #dadce0;
+        border-radius: 50%;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 12px;
+        width: 20px;
+        height: 20px;
+        line-height: 20px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .popover {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        padding: 8px;
+        font-size: 12px;
+        white-space: nowrap;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .update-button {
+        background-color: #f8f9fa;
+        border: 1px solid #f8f9fa;
+        border-radius: 4px;
+        padding: 10px;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .update-button:hover {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    .reset-button-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .reset-button {
+        background-color: #f8f9fa;
+        border: 1px solid #dadce0;
+        border-radius: 4px;
+        color: #3c4043;
+        font-family: arial,sans-serif;
+        font-size: 14px;
+        padding: 0 16px;
+        line-height: 27px;
+        height: 36px;
+        min-width: 54px;
+        text-align: center;
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .reset-button:hover {
+        background-color: #ea4335;
+        color: white;
+    }
+
+    .error-message {
+        background-color: #ffebee;
+        color: #c62828;
+        padding: 10px;
+        margin-bottom: 20px;
+        border-radius: 4px;
+        font-family: arial, sans-serif;
+        font-size: 14px;
+        position: absolute;
+        top: 30px;
+        left: 20px;
+    }
+</style>
+
+<script>
+    window.scrollToElement = (elementId) => {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+</script>
+
+@code {
+    private static string? loadedIndexPath = null;
+    private static string? distanceMetric = null;
+    private static Dictionary<string, double>? similarities = null;
+    private string searchQuery = "";
+    private const int DefaultK = 3; // Set a default value for k
+    
+    private string selectedIndex = "tf-idf";
+    private string selectedDistance = "cosine";
+    private string tempSelectedIndex = "tf-idf";
+    private string tempSelectedDistance = "cosine";
+    private string? prevSelectedIndex = null;
+    private string? prevSelectedDistance = null;
+
+    private string? activePopover = null;
+    private string? errorMessage = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        ResetQuery();
+        await UpdateSearchIndex();
+    }
+
+    private async Task UpdateParameters(EventArgs e)
+    {
+        prevSelectedIndex = selectedIndex;
+        prevSelectedDistance = selectedDistance;
+        try
+        {
+            selectedIndex = tempSelectedIndex;
+            selectedDistance = tempSelectedDistance;
+
+            Console.WriteLine($"prevSelectedIndex: {prevSelectedIndex}");
+            Console.WriteLine($"selectedIndex: {selectedIndex}");
+            Console.WriteLine($"prevSelectedDistance: {prevSelectedDistance}");
+            Console.WriteLine($"selectedDistance: {selectedDistance}");
+
+            await UpdateSearchIndex();
+            ResetQuery();
+            
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error updating parameters", ex);
+        }
+    }
+
+    private async Task UpdateSearchIndex()
+    {
+        try
+        {
+            HandleIndex("Documents", selectedIndex, selectedDistance);
+            HandleLoad($"Indexes/{selectedIndex.ToLower()}/index.json");
+            StateHasChanged();
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error updating search index", ex);
+        }
+    }
+
+    private void ResetQuery()
+    {
+        try
+        {
+            searchQuery = "";
+            similarities = null;
+            StateHasChanged();
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error resetting query", ex);
+        }
+    }
+
+    private async Task HandleKeyPress(KeyboardEventArgs e)
+    {
+        try
+        {
+            if (e.Key == "Enter")
+            {
+                await PerformSearch();
+            }
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error handling key press", ex);
+        }
+    }
+
+    private async Task PerformSearch()
+    {
+        try
+        {
+            if (string.IsNullOrWhiteSpace(searchQuery))
+            {
+                HandleError("Search query cannot be empty", new Exception("Search query cannot be empty"));
+                return;
+            }
+            HandleSearch(searchQuery, DefaultK);
+            Console.WriteLine($"Selected Index: {selectedIndex}");
+            Console.WriteLine($"Selected Distance: {selectedDistance}");
+            StateHasChanged();
+            await Task.Delay(100);
+            await JSRuntime.InvokeVoidAsync("scrollToElement", "search-results-container");
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error performing search", ex);
+        }
+    }
+
+    private void TogglePopover(string key)
+    {
+        try
+        {
+            if (activePopover == key)
+            {
+                activePopover = null;
+            }
+            else
+            {
+                activePopover = key;
+            }
+            errorMessage = null;
+        }
+        catch (Exception ex)
+        {
+            HandleError("Error toggling popover", ex);
+        }
+    }
+
+    static void HandleIndex(string folder, string indexer, string distance)
+    {
+        // Validate arguments
+        if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(indexer) || string.IsNullOrEmpty(distance))
+        {
+            Console.WriteLine("Invalid arguments for index command.");
+            return;
+        }
+
+        if (!Directory.Exists(folder))
+        {
+            Console.WriteLine($"Error: Folder not found at {folder}");
+            return;
+        }
+
+        distanceMetric = distance;
+
+        // Process documents
+        DocumentProcessor processor = new DocumentProcessor();
+        DocumentCollection collection = processor.ProcessDocumentsInFolder(folder);
+
+        // Get word occurrences and document frequency
+        var wordOccurrences = collection.GetWordOccurrences();
+        var documentFrequency = collection.DocumentFrequency;
+
+        // Create and save the chosen index type
+        switch (indexer.ToLower())
+        {
+            case "tf-idf":
+                // Compute TF-IDF
+                TF_IDF.tf_idf tfIdf = new TF_IDF.tf_idf();
+                var tf = tfIdf.ComputeTF(wordOccurrences);
+                var idf = tfIdf.ComputeIDF(wordOccurrences, documentFrequency);
+                var tf_idf = tfIdf.ComputeTF_IDF(tf, idf);
+
+                // Save TF-IDF to JSON
+                tfIdf.SaveTF_IDFToJson(tf_idf, folder);
+                break;
+
+            case "inverted":
+                InvertedIndex invertedIndex = new InvertedIndex();
+                invertedIndex.AddDocuments(collection);
+                invertedIndex.SaveToJson(folder);
+                break;
+
+            default:
+                Console.WriteLine("Error: Unsupported indexer type. Supported types are 'tf-idf' and 'inverted'.");
+                return;
+        }
+
+        Console.WriteLine($"Indexing complete for folder: {folder}");
+        Console.WriteLine($"Using indexer: {indexer}");
+        Console.WriteLine($"Distance metric: {distance}");
+    }
+
+    static void HandleLoad(string indexPath)
+    {
+        // Check if the correct number of arguments is provided
+        if (indexPath == null)
+        {
+            Console.WriteLine("Usage: load -p <index_path>");
+            return;
+        }
+
+        if (!File.Exists(indexPath))
+        {
+            Console.WriteLine($"Error: File not found at {indexPath}");
+            return;
+        }
+
+        loadedIndexPath = indexPath;
+        Console.WriteLine($"Loaded index from: {indexPath}");
+    }
+
+    static void HandleSearch(string query, int k)
+    {
+        // Verify that an index has been loaded before attempting to search
+        if (loadedIndexPath == null)
+        {
+            Console.WriteLine("Error: No index loaded. Use the 'load' command first.");
+            return;
+        }
+
+        // Display information about the search
+        Console.WriteLine($"Searching for: {query}");
+        Console.WriteLine($"Top {k} results:");
+        Console.WriteLine($"Using distance metric: {distanceMetric}");
+
+        // Implement similarity search based on the distance metric
+        if (distanceMetric.ToLower() == "euclidean")
+        {
+            EuclideanSimilarity euclideanSimilarity = new EuclideanSimilarity(loadedIndexPath);
+            similarities = euclideanSimilarity.CalculateSimilarities(query);
+        }
+        else
+        {
+            CosineSimilarity cosineSimilarity = new CosineSimilarity(loadedIndexPath);
+            similarities = cosineSimilarity.CalculateSimilarities(query);
+        }
+
+        // Display the top k results
+        int count = 0;
+        foreach (var pair in similarities.OrderByDescending(x => x.Value))
+        {
+            if (count >= k) break;
+            Console.WriteLine($"{pair.Key}: {pair.Value:F4}");
+            count++;
+        }
+
+        if (count == 0)
+        {
+            Console.WriteLine("No results found.");
+        }
+    }
+
+    private void HandleError(string message, Exception ex)
+    {
+        errorMessage = message;
+        Console.WriteLine($"Error: {message}");
+        Console.WriteLine(ex.ToString());
+        StateHasChanged();
+    }
+
+    @inject IJSRuntime JSRuntime
+
+}

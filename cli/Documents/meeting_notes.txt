@@ -1,0 +1,24 @@
+Project Kickoff Meeting
+Date: 2023-06-20
+Attendees: Alice, Bob, Charlie, Diana
+
+Agenda:
+1. Project overview
+2. Team roles and responsibilities
+3. Timeline and milestones
+4. Budget discussion
+5. Next steps
+
+Key Decisions:
+- Alice will lead the development team
+- Bob is responsible for UI/UX design
+- Charlie will manage client communications
+- Diana will oversee quality assurance
+
+Action Items:
+1. Alice to create a detailed project plan by 2023-06-27
+2. Bob to present initial design concepts at the next meeting
+3. Charlie to schedule a client introduction call for next week
+4. Diana to draft QA testing procedures by 2023-07-05
+
+Next Meeting: 2023-07-03, 10:00 AM
