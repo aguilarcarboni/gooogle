@@ -91,6 +91,8 @@ static class CLI
         DocumentProcessor processor = new DocumentProcessor();
         var documents = processor.ProcessDocumentsInFolder(folder);
 
+        Console.WriteLine("Documents processed");
+
         // Organize words
         var wordLists = OrganizeWords.CreateWordLists(documents);
         var uniqueWords = OrganizeWords.Unique_Words(OrganizeWords.String_to_List(documents));
@@ -112,6 +114,7 @@ static class CLI
                 break;
 
             case "inverted-index":
+
                 // Create and populate Inverted Index
                 InvertedIndex invertedIndex = new InvertedIndex();
                 invertedIndex.AddDocuments(wordLists);
@@ -128,6 +131,7 @@ static class CLI
         Console.WriteLine($"Indexing complete for folder: {folder}");
         Console.WriteLine($"Using indexer: {indexer}");
         Console.WriteLine($"Distance metric: {distance}");
+        
     }
 
     static void HandleLoad(string[] args)
@@ -153,7 +157,7 @@ static class CLI
     static void HandleSearch(string[] args)
     {
         // Check if the command has the correct format: search -query -k
-        if (args.Length != 4 || args[1][0] != '-' || args[3][0] != '-')
+        if (args.Length != 3)
         {
             Console.WriteLine("Usage: search -<query> -<k>");
             return;
@@ -170,7 +174,7 @@ static class CLI
         string query = args[1].Substring(1);
 
         // Parse the 'k' value (number of results to return)
-        if (!int.TryParse(args[3].Substring(1), out int k))
+        if (!int.TryParse(args[2].Substring(1), out int k))
         {
             Console.WriteLine("Error: Invalid value for k. Must be an integer.");
             return;
@@ -181,15 +185,23 @@ static class CLI
         Console.WriteLine($"Top {k} results:");
         Console.WriteLine($"Using distance metric: {distanceMetric}");
 
-        // TODO: Implement actual search logic here
-        // This should use the loaded index, query, k value, and distance metric
-        // to perform the search and return results
+        // Implement cosine similarity search
+        CosineSimilarity cosineSimilarity = new CosineSimilarity(loadedIndexPath);
+        Dictionary<string, double> similarities = cosineSimilarity.CalculateSimilarities(query);
 
-        // Placeholder: Simulate displaying the top k search results
-        // In a real implementation, this would be replaced with actual search results
-        for (int i = 1; i <= k; i++)
+        // Display the top k results
+        int count = 0;
+        foreach (var pair in similarities)
         {
-            Console.WriteLine($"Result {i}: [Filename] (Score: [Score])");
+            if (count >= k) break;
+            Console.WriteLine($"{pair.Key}: {pair.Value:F4}");
+            count++;
+        }
+
+        if (count == 0)
+        {
+            Console.WriteLine("No results found.");
         }
     }
+
 }
