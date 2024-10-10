@@ -36,16 +36,16 @@
         <div class="search-buttons">
             <button class="search-button" @onclick="PerformSearch">Google Search</button>
             <button class="search-button">I'm Feeling Lucky</button>
-            @if (similarities != null && similarities.Any())
+            @if (gooogle.Similarities != null && gooogle.Similarities.Any())
             {
                 <button class="reset-button" @onclick="ResetQuery">Reset Query</button>
             }
         </div>
     </div>
-    @if (similarities != null && similarities.Any())
+    @if (gooogle.Similarities != null && gooogle.Similarities.Any())
     {
         <div class="search-results">
-            @foreach (var result in similarities.OrderByDescending(x => x.Value).Take(DefaultK))
+            @foreach (var result in gooogle.Similarities.OrderByDescending(x => x.Value).Take(DefaultK))
             {
                 <div class="search-result-container">
                     <div class="search-result">
@@ -85,10 +85,10 @@
     }
 
     .google-logo {
-        font-size: 80px;
+        font-size: 70px;
         font-weight: bold;
         font-family: arial,sans-serif;
-        letter-spacing: -8px;
+        letter-spacing: -10px;
     }
 
     .search-results-container {
@@ -369,11 +369,9 @@
 </script>
 
 @code {
-    private static string? loadedIndexPath = null;
-    private static string? distanceMetric = null;
-    private static Dictionary<string, double>? similarities = null;
+    private Gooogle gooogle = new Gooogle();
     private string searchQuery = "";
-    private const int DefaultK = 3; // Set a default value for k
+    private const int DefaultK = 3;
     
     private string selectedIndex = "tf-idf";
     private string selectedDistance = "cosine";
@@ -420,8 +418,8 @@
     {
         try
         {
-            HandleIndex("Documents", selectedIndex, selectedDistance);
-            HandleLoad($"Indexes/{selectedIndex.ToLower()}/index.json");
+            gooogle.Index("Documents", selectedIndex, selectedDistance);
+            gooogle.Load($"Indexes/{selectedIndex.ToLower()}/index.json");
             StateHasChanged();
             errorMessage = null;
         }
@@ -436,7 +434,7 @@
         try
         {
             searchQuery = "";
-            similarities = null;
+            gooogle.ResetSimilarities();
             StateHasChanged();
             errorMessage = null;
         }
@@ -471,7 +469,7 @@
                 HandleError("Search query cannot be empty", new Exception("Search query cannot be empty"));
                 return;
             }
-            HandleSearch(searchQuery, DefaultK);
+            gooogle.Search(searchQuery, DefaultK);
             Console.WriteLine($"Selected Index: {selectedIndex}");
             Console.WriteLine($"Selected Distance: {selectedDistance}");
             StateHasChanged();
@@ -505,121 +503,6 @@
         }
     }
 
-    static void HandleIndex(string folder, string indexer, string distance)
-    {
-        // Validate arguments
-        if (string.IsNullOrEmpty(folder) || string.IsNullOrEmpty(indexer) || string.IsNullOrEmpty(distance))
-        {
-            Console.WriteLine("Invalid arguments for index command.");
-            return;
-        }
-
-        if (!Directory.Exists(folder))
-        {
-            Console.WriteLine($"Error: Folder not found at {folder}");
-            return;
-        }
-
-        distanceMetric = distance;
-
-        // Process documents
-        DocumentProcessor processor = new DocumentProcessor();
-        DocumentCollection collection = processor.ProcessDocumentsInFolder(folder);
-
-        // Get word occurrences and document frequency
-        var wordOccurrences = collection.GetWordOccurrences();
-        var documentFrequency = collection.DocumentFrequency;
-
-        // Create and save the chosen index type
-        switch (indexer.ToLower())
-        {
-            case "tf-idf":
-                // Compute TF-IDF
-                TF_IDF.tf_idf tfIdf = new TF_IDF.tf_idf();
-                var tf = tfIdf.ComputeTF(wordOccurrences);
-                var idf = tfIdf.ComputeIDF(wordOccurrences, documentFrequency);
-                var tf_idf = tfIdf.ComputeTF_IDF(tf, idf);
-
-                // Save TF-IDF to JSON
-                tfIdf.SaveTF_IDFToJson(tf_idf, folder);
-                break;
-
-            case "inverted":
-                InvertedIndex invertedIndex = new InvertedIndex();
-                invertedIndex.AddDocuments(collection);
-                invertedIndex.SaveToJson(folder);
-                break;
-
-            default:
-                Console.WriteLine("Error: Unsupported indexer type. Supported types are 'tf-idf' and 'inverted'.");
-                return;
-        }
-
-        Console.WriteLine($"Indexing complete for folder: {folder}");
-        Console.WriteLine($"Using indexer: {indexer}");
-        Console.WriteLine($"Distance metric: {distance}");
-    }
-
-    static void HandleLoad(string indexPath)
-    {
-        // Check if the correct number of arguments is provided
-        if (indexPath == null)
-        {
-            Console.WriteLine("Usage: load -p <index_path>");
-            return;
-        }
-
-        if (!File.Exists(indexPath))
-        {
-            Console.WriteLine($"Error: File not found at {indexPath}");
-            return;
-        }
-
-        loadedIndexPath = indexPath;
-        Console.WriteLine($"Loaded index from: {indexPath}");
-    }
-
-    static void HandleSearch(string query, int k)
-    {
-        // Verify that an index has been loaded before attempting to search
-        if (loadedIndexPath == null)
-        {
-            Console.WriteLine("Error: No index loaded. Use the 'load' command first.");
-            return;
-        }
-
-        // Display information about the search
-        Console.WriteLine($"Searching for: {query}");
-        Console.WriteLine($"Top {k} results:");
-        Console.WriteLine($"Using distance metric: {distanceMetric}");
-
-        // Implement similarity search based on the distance metric
-        if (distanceMetric.ToLower() == "euclidean")
-        {
-            EuclideanSimilarity euclideanSimilarity = new EuclideanSimilarity(loadedIndexPath);
-            similarities = euclideanSimilarity.CalculateSimilarities(query);
-        }
-        else
-        {
-            CosineSimilarity cosineSimilarity = new CosineSimilarity(loadedIndexPath);
-            similarities = cosineSimilarity.CalculateSimilarities(query);
-        }
-
-        // Display the top k results
-        int count = 0;
-        foreach (var pair in similarities.OrderByDescending(x => x.Value))
-        {
-            if (count >= k) break;
-            Console.WriteLine($"{pair.Key}: {pair.Value:F4}");
-            count++;
-        }
-
-        if (count == 0)
-        {
-            Console.WriteLine("No results found.");
-        }
-    }
-
     private void HandleError(string message, Exception ex)
     {
         errorMessage = message;
@@ -629,5 +512,4 @@
     }
 
     @inject IJSRuntime JSRuntime
-
 }

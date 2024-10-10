@@ -1,0 +1,328 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{amsmath}
+\usepackage{bookmark}
+\usepackage{microtype}
+\usepackage{graphicx}
+\graphicspath{ {./images/} }
+
+\geometry{a4paper, margin=1in}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{ 
+  basicstyle=\ttfamily,        % Set the basic style to typewriter font
+  numbers=left,                % Show line numbers on the left side
+  numberstyle=\tiny\color{gray}, % Set line number style to tiny and gray
+  stepnumber=1,                % Number every line (increment by 1)
+  numbersep=5pt,               % Space between line numbers and code
+  backgroundcolor=\color{white}, % Set background color to white
+  showspaces=false,            % Don't show spaces with special characters
+  showstringspaces=false,      % Don't show spaces in strings
+  showtabs=false,              % Don't show tabs with special characters
+  frame=single,                % Add a single frame around the code
+  tabsize=2,                   % Set tab size to 2 spaces
+  breaklines=true,             % Allow long lines to break and wrap
+  captionpos=b                 % Position captions at the bottom of listings
+}
+
+\title{Indexer\_search Project Report}
+\author{Andres Aguilar, Esteban Murillo}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+This report provides a detailed overview of the Indexer\_search project, which implements a command-line interface for indexing and searching documents using TF-IDF and Inverted Index algorithms. The project consists of several components, each responsible for different aspects of the indexing and searching process.
+
+\section{TF-IDF Algorithm and Cosine Similarity}
+
+\subsection{TF-IDF (Term Frequency-Inverse Document Frequency)}
+TF-IDF is a method used to evaluate how important a word is to a document within a collection of documents. It combines two main ideas:
+
+\subsubsection{Term Frequency (TF)}
+Term Frequency measures how often a word appears in a document. The basic idea is that words that appear more frequently in a document are likely to be more important for that document. However, simply counting occurrences isn't enough, as it would give too much weight to common words like "the" or "and". To address this, TF is often calculated as:
+
+\begin{equation}
+TF(t,d) = \frac{\text{Number of times term } t \text{ appears in document } d}{\text{Total number of terms in document } d}
+\end{equation}
+
+This gives us a proportion rather than a raw count, which helps to normalize for document length.
+
+\subsubsection{Inverse Document Frequency (IDF)}
+Inverse Document Frequency looks at how common or rare a word is across all the documents in the collection. The reasoning here is that if a word appears in many documents, it's probably not very useful for distinguishing between documents. On the other hand, if a word only appears in a few documents, it's likely to be more meaningful. IDF is typically calculated as:
+
+\begin{equation}
+IDF(t,D) = \log \left(\frac{\text{Total number of documents}}{\text{Number of documents containing term } t}\right)
+\end{equation}
+
+The logarithm is used to dampen the effect of IDF.
+
+\subsubsection{TF-IDF Score}
+The TF-IDF score is simply the product of TF and IDF:
+
+\begin{equation}
+TF\text{-}IDF(t,d,D) = TF(t,d) \times IDF(t,D)
+\end{equation}
+
+This combination means that:
+\begin{itemize}
+    \item Words that appear frequently in a document get a higher score (high TF).
+    \item But if those words also appear in many other documents, their score is reduced (low IDF).
+    \item Words that appear frequently in a document but rarely in other documents get the highest scores.
+\end{itemize}
+
+For example, in a collection of news articles, the word "the" might have a high TF in many documents, but its IDF would be very low because it appears in almost every document. On the other hand, a word like "earthquake" might have a high TF in only a few documents, and a high IDF because it doesn't appear in most documents. This would give "earthquake" a higher TF-IDF score in the documents where it does appear.
+
+\subsection{Practical Applications of TF-IDF}
+TF-IDF has several practical uses in information retrieval and text analysis:
+
+\begin{itemize}
+    \item Search engines use it to rank the relevance of documents to a search query.
+    \item It can be used to automatically generate keywords or tags for documents.
+    \item In text summarization, words with high TF-IDF scores are often used to create summaries.
+    \item It's useful for content-based recommendation systems, helping to find similar documents.
+\end{itemize}
+
+\subsection{Limitations of TF-IDF}
+While TF-IDF is powerful and widely used, it does have some limitations:
+
+\begin{itemize}
+    \item It doesn't capture the meaning or context of words, just their statistical properties.
+    \item It can't handle synonyms or related words - "car" and "automobile" are treated as completely different terms.
+    \item For very large document collections, the IDF scores might not vary much between terms.
+\end{itemize}
+
+Despite these limitations, TF-IDF remains a fundamental technique in text analysis due to its simplicity, efficiency, and effectiveness in many applications.
+
+\subsection{Cosine Similarity}
+Cosine similarity measures the similarity between two vectors by calculating the cosine of the angle between them. It is used to compare documents by representing them as vectors in a multidimensional space:
+
+\begin{equation}
+\text{Cosine Similarity} = \cos(\theta) = \frac{A \cdot B}{||A|| \times ||B||}
+\end{equation}
+
+Where $A$ and $B$ are document vectors, $A \cdot B$ is the dot product, and $||A||$ and $||B||$ are the magnitudes of the vectors.
+
+In the context of document similarity:
+\begin{itemize}
+    \item Each document is represented as a vector where each dimension corresponds to a term in the vocabulary.
+    \item The value in each dimension is the TF-IDF weight of that term in the document.
+    \item Cosine similarity is used to compare these document vectors.
+\end{itemize}
+
+Cosine similarity has several advantages for document comparison:
+\begin{itemize}
+    \item It is independent of document length, allowing comparison of documents with different lengths.
+    \item It provides a normalized measure of similarity, with values ranging from -1 (exactly opposite) to 1 (exactly the same).
+    \item It is computationally efficient, especially for sparse vectors.
+\end{itemize}
+
+While the current implementation of the Indexer\_search project focuses on TF-IDF calculation, incorporating cosine similarity could enhance its document comparison capabilities.
+
+\section{Project Structure}
+The project consists of the following main classes:
+\begin{itemize}
+    \item CLI.cs (assumed to exist)
+    \item Document.cs
+    \item DocumentCollection.cs
+    \item DocumentProcessor.cs
+    \item InvertedIndex.cs
+    \item TF\_IDF.cs
+    \item OrganizeWords.cs
+    \item Similarity.cs
+    \item CosineSimilarity.cs
+    \item EuclideanSimilarity.cs
+\end{itemize}
+
+\section{Class Diagram}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\linewidth]{Class Flow Diagram.png}
+    \caption{Enter Caption}
+    \label{fig:enter-label}
+\end{figure}
+
+\section{Document Class}
+The Document class in Document.cs is responsible for reading and processing individual documents.
+
+\subsection{Key Methods}
+\subsubsection{Constructor}
+The constructor initializes a document from a file:
+
+\begin{lstlisting}
+public Document(string filePath)
+{
+    // Initialize document properties
+    // Read file content
+    // Process content into words
+    // Count word occurrences
+}
+\end{lstlisting}
+
+\subsubsection{ReadFileContent Method}
+This method reads the content of various file types:
+
+\begin{lstlisting}
+private string ReadFileContent(string filePath)
+{
+    // Switch based on file type
+    // Call appropriate method for each file type
+}
+\end{lstlisting}
+
+\section{DocumentCollection Class}
+The DocumentCollection class in DocumentCollection.cs manages a collection of documents.
+
+\subsection{Key Methods}
+\subsubsection{AddDocument Method}
+This method adds a document to the collection and updates related data:
+
+\begin{lstlisting}
+public void AddDocument(Document document)
+{
+    // Add document to collection
+    // Update unique words
+    // Update document frequency
+}
+\end{lstlisting}
+
+\section{DocumentProcessor Class}
+The DocumentProcessor class in DocumentProcessor.cs processes documents in a folder.
+
+\subsection{Key Methods}
+\subsubsection{ProcessDocumentsInFolder Method}
+This method processes all documents in a given folder:
+
+\begin{lstlisting}
+public DocumentCollection ProcessDocumentsInFolder(string folderPath)
+{
+    // Create new DocumentCollection
+    // Iterate through files in folder
+    // Create Document objects and add to collection
+    // Return the populated DocumentCollection
+}
+\end{lstlisting}
+
+\section{InvertedIndex Class}
+The InvertedIndex class in InvertedIndex.cs implements the Inverted Index data structure.
+
+\subsection{Key Methods}
+\subsubsection{AddDocuments Method}
+This method adds documents to the inverted index:
+
+\begin{lstlisting}
+public void AddDocuments(DocumentCollection collection)
+{
+    // Iterate through documents in collection
+    // Add each word to the inverted index
+}
+\end{lstlisting}
+
+\section{TF\_IDF Class}
+The TF\_IDF class in TF\_IDF.cs implements the Term Frequency-Inverse Document Frequency algorithm.
+
+\subsection{Key Methods}
+\subsubsection{ComputeTF\_IDF Method}
+This method computes the TF-IDF scores:
+
+\begin{lstlisting}
+public Dictionary<string, Dictionary<string, double>> ComputeTF_IDF(Dictionary<string, Dictionary<string, double>> tf, Dictionary<string, double> idf)
+{
+    // Compute TF-IDF for each word in each document
+    // Return a nested dictionary of TF-IDF scores
+}
+\end{lstlisting}
+
+\section{Similarity Classes}
+The project includes abstract Similarity class and two concrete implementations: CosineSimilarity and EuclideanSimilarity.
+
+\subsection{Key Methods}
+\subsubsection{CalculateSimilarities Method}
+This method calculates similarities between a query and documents:
+
+\begin{lstlisting}
+public Dictionary<string, double> CalculateSimilarities(string query)
+{
+    // Create query vector
+    // Calculate similarity with each document
+    // Return sorted dictionary of similarities
+}
+\end{lstlisting}
+
+\section{Command-Line Interface and Web Application}
+
+The Indexer\_search project includes both a command-line interface (CLI) and a web application, providing flexible ways for users to interact with the document indexing and search functionality.
+
+\subsection{Command-Line Interface}
+
+The CLI, implemented in the Program.cs file, offers a user-friendly interface for indexing documents, loading indexes, and performing searches. Key features include:
+
+\begin{itemize}
+    \item Interactive command prompt for user input
+    \item Support for indexing documents using either TF-IDF or Inverted Index
+    \item Ability to load previously created indexes
+    \item Search functionality with customizable result count
+    \item Support for different distance metrics (cosine and Euclidean)
+\end{itemize}
+
+\subsubsection{Key Methods}
+\begin{itemize}
+    \item \texttt{HandleIndex}: Processes the indexing command, validating inputs and creating the specified index type.
+    \item \texttt{HandleLoad}: Loads a previously created index file.
+    \item \texttt{HandleSearch}: Performs a search query on the loaded index, using the specified distance metric.
+\end{itemize}
+
+\subsection{Web Application}
+
+The web application, built using Blazor, provides a graphical user interface for document searching. It mimics the appearance of popular search engines, offering a familiar and intuitive user experience. Key components include:
+
+\begin{itemize}
+    \item Home.razor: The main page component, handling user interactions and search display.
+    \item Gooogle.cs: A backend class managing indexing, loading, and searching operations.
+\end{itemize}
+
+\subsubsection{Features}
+\begin{itemize}
+    \item Google-like search interface with a prominent search box
+    \item Dropdown menus for selecting index type (TF-IDF or Inverted) and distance metric (Cosine or Euclidean)
+    \item Real-time search results display
+    \item Information popover for each search result, showing similarity scores
+    \item Error handling and user feedback
+\end{itemize}
+
+\subsubsection{Key Methods}
+\begin{itemize}
+    \item \texttt{UpdateParameters}: Updates the selected index type and distance metric.
+    \item \texttt{PerformSearch}: Executes the search query and updates the display with results.
+    \item \texttt{ResetQuery}: Clears the current search query and results.
+\end{itemize}
+
+The web application leverages the same underlying indexing and search algorithms as the CLI, providing a more visual and interactive way to explore the document collection. It demonstrates the flexibility of the project's architecture, allowing for multiple user interfaces to interact with the core functionality.
+
+\section{Conclusion}
+The Indexer\_search project provides a comprehensive solution for indexing and searching documents using both TF-IDF and Inverted Index algorithms. It offers a flexible command-line interface for users to interact with the system and supports various document types. The modular structure of the project allows for easy maintenance and potential future extensions.
+
+The implementation demonstrates key concepts in information retrieval, including:
+\begin{itemize}
+    \item Document processing and text extraction
+    \item Word frequency analysis
+    \item Inverted index construction
+    \item TF-IDF score calculation
+    \item Command-line interface design
+\end{itemize}
+
+This project serves as a solid foundation for building more advanced document indexing and search systems, with potential for further optimization and feature additions.
+
+\sloppy
+% Problematic section
+\fussy
+
+\end{document}
