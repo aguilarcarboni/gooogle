@@ -5,10 +5,6 @@
 ### Description
 Welcome to Gooogle, a project developed for our Object-Oriented Programming class that brings the power of Google-like search to your local files. This project implements an efficient indexer for documents, processing multiple files, extracting words, and creating an index that allows for fast searching and retrieval of information. 
 
-Just like Google, but for your personal document collection, Gooogle supports case-insensitive searching and utilizes optimized data structures for indexing and searching operations. Whether you're managing a large collection of text files or simply want a smarter way to search through your documents, Gooogle provides a robust solution.
-
-This system demonstrates key concepts in OOP and efficient data management, offering a practical application of search algorithms and data structures. Get ready to experience the convenience of web-scale search, right on your local machine!
-
 ### Compiling and running
 
 To install Gooogle, clone the repository and run the following command:
