@@ -28,6 +28,6 @@ cd cli && dotnet run
 Ensure you have the .NET SDK installed on your machine. For VSCode setup, follow the instructions [here](https://code.visualstudio.com/docs/languages/dotnet#_setting-up-vs-code-for-net-development).
 
 ### Results
-Scored a 90% on the project.
+Scored a 84% on the project.
 
 ### Created by [@aguilarcarboni](https://github.com/aguilarcarboni/) and [@Esteban11632](https://github.com/Esteban11632)
