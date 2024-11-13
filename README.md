@@ -1,6 +1,6 @@
-# OOP Project 1: Gooogle
+# Gooogle
 
-## Efficient, on-memory document indexing and searching
+## Object Oriented Programming
 
 ### Description
 Welcome to Gooogle, a project developed for our Object-Oriented Programming class that brings the power of Google-like search to your local files. This project implements an efficient indexer for documents, processing multiple files, extracting words, and creating an index that allows for fast searching and retrieval of information. 
